@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+	
+</head>
+<body>
+<h1>SEPTEMBER 9</h1>
+<div>
+	<ul>
+		<li><a class="add-to-cart" href="a" data-name="Apple" data-price="1.22">Apple $1.22</a></li>
+		<li><a class="add-to-cart" href="a" data-name="Ball" data-price="2.22">Apple $2.22</a></li>
+		<li><a class="add-to-cart" href="a" data-name="Shoe" data-price="22.22">Apple $22.22</a></li>
+		<li><a class="add-to-cart" href="a" data-name="Fridge" data-price="1.22">Apple $5.22</a></li>
+	</ul>
+	<button id="clear-cart">Clear Cart</button>
+
+</div>
+<div>
+	<ul>
+	</ul id="show-cart">
+	< ! -- -->
+	</div>
+
+
+<Script>
+	$(".add-to-cart").click(function(event){
+		event.preventDefault();
+		var name=$(this).attr("data-name");
+		var price=Number($(this).attr("data-price"));
+		addItemToCart(name,price,1);
+		displayCart();
+	});
+	function displayCart(){
+		var cartArray = listCart();
+		var output="";
+		for(var i in cartArray){
+			output += "<li>"+cartArray[i].name+" "cartArray[i].count+"</li>"
+
+		}
+		$("show-cart").html(output);
+			}
+
+
+
+	//************************************************
+	// Shopping Cart functions
+	var cart =[];
+	var Item =function(name,price,count){
+		this.name =name;
+		this.price =price;
+		this.count =count;
+	};
+	function addItemToCart(name,price,count){   	// addItemToCart(name,price,count);
+		for(var i in cart){
+			if ( cart[i].name === name){
+				cart[i].count += count;
+				return;
+			}
+		}
+		var item=new Item(name, price , count);
+		cart.push(item);
+		saveCart();
+	}
+
+
+	function removeItemFromCart(name){   		// removeItemFromCart(name)//removes one item
+		for (var i in cart) {
+			if ( cart [i].name === name){
+				cart [i].count --;
+				if (cart [i].count === 0) {
+					cart.splice(i,1);			//removes array
+				}
+				break;
+			}
+		}
+		saveCart();
+	}
+	
+
+
+	function removeItemFromCartAll(name){ 	//removes all item name
+		for( var i in cart){
+			if(cart[i].name === name){
+			cart.splice(i,1);
+			break;
+			}
+		}
+	saveCart();
+	}
+
+	
+	
+	 function clearCart(){
+	 	cart =[];
+	 	saveCart();
+
+	}
+	//clearCart();
+	 //console.log(cart);
+
+	 function countCart(){  			//countCart() -> return total count
+	 	var totalCount=0;
+	 	for(var i in cart){
+	 		totalCount += cart[i].count;
+	 	}
+
+		return totalCount;
+
+	 }
+	 console.log(countCart()); 				// totalCart()->return total cart
+	 function totalCart(){
+	 	var totalCost=0;
+	 	for(var i in cart){
+	 		totalCost +=cart[i].price;
+
+	 	}
+	 	return totalCost;
+	 }
+	 	console.log( totalCart());
+	
+	 function listCart() {				//-.array of items
+	 	 	var cartCopy=[];
+	 	 	for(var i in cart){
+	 	 		var item=cart[i];
+	 	 		var itemCopy={};
+	 	 		for(var p in item){
+	 	 			itemCopy[p]= item[p];
+	 	 		}
+	 	 		cartCopy.push(itemCopy);
+	 	 	}
+	 	 	return cartCopy;
+	  		
+	  	}	
+	 	
+	 	function saveCart(){
+	 		localStorage.setItem("shoppingCart",JSON.stringify(cart));			//JAVA SCRIPT OBJECT NOTATION
+	 	}
+
+
+		 function loadCart(){
+		 	cart=JSON.parse (localStorage.getItem("shoppingCart"));
+
+		 }
+		 loadCart();
+		 var array=listCart();
+		 console.log(array);
+		</Script>
+	</body>
+</html>
